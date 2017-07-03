@@ -2,12 +2,21 @@
 
 
 <form action="/contacts" method="POST" >
+ 
   <div  class="form-group">
     <label>Ваше email</label>
     <input name="mail" type="text" class="form-control"  placeholder="Введите ваш email">
   </div>
 
-  <textarea name = "msgarea" class="form-control" rows="3" placeholder="Введите ваше сообщения...."></textarea>
+  <div>
+  	<label>Ваше тему сообщения</label>
+   	<input name="theme" type="text" class="form-control"  placeholder="Введите тему сообщения">
+
+  </div>
+
+  
+   	<label>Введите ваше сообщение</label>
+  	<textarea name = "msgarea" class="form-control" rows="3"></textarea>
 
   <button type="submit" class="btn btn-primary" >Отправить</button>
 </form>
