@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
+require 'Pony'
 
 get '/' do
 	erb "Привет! <a href=\"https://github.com/bootstrap-ruby/sinatra-bootstrap\">Оригинальный</a> шаблон модифицировался в <a href=\"http://rubyschool.us/\">Ruby School!!!</a>"			
@@ -47,13 +48,48 @@ post '/visit' do
 end
 
 post '/contacts' do
+
+
+
 	@mail = params[:mail]
 	@msgarea = params[:msgarea]
+	@theme = params[:theme]
 
+#	f = File.open './public/contacts.txt', 'a'
+#	f.write "Емэйл : #{@mail}, сообщение : #{@msgarea}\n"
+#	f.close
+	
+	hh = {
+		:mail => 'введите email', 
+		:theme => 'введите тему',
+		:msgarea => 'Введите сообщение', 
+	}
 
-	f = File.open './public/contacts.txt', 'a'
-	f.write "Емэйл : #{@mail}, сообщение : #{@msgarea}\n"
-	f.close
+	@error = hh.select {|kk| params[kk] == ""}.values.join(" , ")
 
-	erb :contacts
+	if @error !=""
+		return erb :contacts
+		
+	end
+
+	
+
+	
+	Pony.mail(
+		:to => @mail, 
+		:from => 'victorhad@mail.ru', 
+		:subject => @theme, 
+		:body => @msgarea, 
+		:via => :smtp, 
+		:via_options => {
+   :address     => 'smtp.mail.ru',
+   :port     => '25',
+   :enable_starttls_auto => true, 
+    :user_name     => '',
+    :password => '',
+    :auth     => :plain           # :plain, :login, :cram_md5, no auth by default  
+ })
+
+	erb "Ok , mail is #{@mail}, theme #{@theme}, msgarea #{@msgarea}"
+
 end
